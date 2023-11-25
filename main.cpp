@@ -2,7 +2,7 @@
 
 template<typename T>
 class DynamicArray {
-private:
+protected:
     T *m_array;
     int m_size;
 
@@ -87,9 +87,52 @@ public:
     }
 };
 
+
+template<typename T> class DynamicStack : public DynamicArray<T> {
+private:
+    int s_size;
+    T* s_arr;
+public:
+
+    // Конструктор с указанием размера стека
+    DynamicStack(int size, T value) : DynamicArray<T>(size,value){
+        s_size = size;
+        s_arr = new T[s_size];
+        for (int i = 0; i < s_size; i++) {
+            s_arr[i] = value;
+        }
+    }
+
+    // Добавление элемента на вершину стека
+    void push(T value) {
+        this->increaseSize(this->m_size + 1, value);
+    }
+
+    // Удаление элемента с вершины стека
+    void pop() {
+        if (this->m_size > 0) {
+            this->decreaseSize(this->m_size - 1);
+        }
+        else {
+            std::cout << "Error: Stack is empty" << std::endl;
+        }
+    }
+};
+
+
 int main() {
 
+    //добовление элемента
+    DynamicStack<int> NewStack(10,0);
+    std::cout << std::endl;
+    NewStack.printArray();
+    NewStack.push(999);
+    NewStack.push(999);
+    NewStack.printArray();
+    NewStack.pop();NewStack.pop();NewStack.pop();NewStack.pop();NewStack.pop();NewStack.pop();
+    NewStack.printArray();
 
+    /*
     //2 Вида массивов
     DynamicArray<int> intArray(5, 10);
     intArray.printArray();
@@ -107,7 +150,7 @@ int main() {
 
 
     //2 конструктора копирования
-    DynamicArray<int> NewArrayInt(intArray);
+    DynamicArray<int> NewArrayInt = intArray;
     NewArrayInt.printArray();
 
     DynamicArray<double> NewArrayDouble(doubleArray);
@@ -124,5 +167,7 @@ int main() {
     DoubleArray.printArray();
     DoubleArray = doubleArray;
     DoubleArray.printArray();
+*/
+
     return 0;
 }
