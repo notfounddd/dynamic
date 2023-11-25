@@ -89,9 +89,11 @@ public:
 
 
 template<typename T> class DynamicStack : public DynamicArray<T> {
+
 private:
     int s_size;
     T* s_arr;
+
 public:
 
     // Конструктор с указанием размера стека
