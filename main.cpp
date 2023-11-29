@@ -87,22 +87,56 @@ public:
     }
 };
 
-
-template<typename T> class DynamicStack : public DynamicArray<T> {
-
-private:
+template<typename T>
+class DynamicStack : public DynamicArray<T> {
     int s_size;
-    T* s_arr;
-
+    T *s_arr;
 public:
 
     // Конструктор с указанием размера стека
-    DynamicStack(int size, T value) : DynamicArray<T>(size,value){
+    DynamicStack(int size, T value) : DynamicArray<T>(size, value) {
         s_size = size;
         s_arr = new T[s_size];
         for (int i = 0; i < s_size; i++) {
             s_arr[i] = value;
         }
+    }
+
+// Конструктор копирования наследованного класса
+    DynamicStack(const DynamicStack &other) : DynamicArray<T>(other) {
+        s_size = other.s_size;
+        s_arr = new T[s_size];
+        for (int i = 0; i < s_size; i++) {
+            s_arr[i] = other.s_arr[i];
+        }
+    }
+
+// Деструктор наследованного класса
+    ~DynamicStack() {
+        delete[] s_arr;
+        s_arr = nullptr;
+        std::cout << "Destructor for stack" << std::endl;
+    }
+
+// Оператор присваивания наследованного класса
+    DynamicStack &operator=(const DynamicStack &other) {
+        if (this != &other) {
+            delete[] s_arr;
+            s_size = other.m_size;
+            s_arr = new T[s_size];
+            for (int i = 0; i < s_size; i++) {
+                s_arr[i] = other.s_arr[i];
+            }
+        }
+        return *this;
+    }
+    
+    // Вывод наследованного класа
+    void printStack() {
+        for (int i = 0; i < s_size; i++) {
+            std::cout << s_arr[i] << ' ';
+        }
+        std::cout << std::endl;
     }
 
     // Добавление элемента на вершину стека
@@ -114,8 +148,7 @@ public:
     void pop() {
         if (this->m_size > 0) {
             this->decreaseSize(this->m_size - 1);
-        }
-        else {
+        } else {
             std::cout << "Error: Stack is empty" << std::endl;
         }
     }
@@ -125,14 +158,22 @@ public:
 int main() {
 
     //добовление элемента
-    DynamicStack<int> NewStack(10,0);
+    DynamicStack<double> Stack(10, 0.1);
     std::cout << std::endl;
-    NewStack.printArray();
+    Stack.printStack();
+    /*
     NewStack.push(999);
     NewStack.push(999);
     NewStack.printArray();
     NewStack.pop();NewStack.pop();NewStack.pop();NewStack.pop();NewStack.pop();NewStack.pop();
     NewStack.printArray();
+    */
+    DynamicStack<double> NewStack = Stack;
+    NewStack.printStack();
+    DynamicStack<double> DoubStack(4, 999.999);
+    DoubStack.printStack();
+    DoubStack = NewStack;
+    DoubStack.printStack();
 
     /*
     //2 Вида массивов
